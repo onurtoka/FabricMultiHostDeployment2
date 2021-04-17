@@ -26,6 +26,10 @@ type Product struct {
 	ProducerCheckoutDate  string `json:"producercheckoutdate"`
 	Transporter  string `json:"transporter"`
 	TransporterEntryDate  string `json:"transporterentrydate"`
+	TransporterCheckoutDate  string `json:"transportercheckoutdate"`
+	Warehouse string `json:"warehouse"`
+	WarehouseEntryDate string `json:"warehouseentrydate"`
+	WarehouseCheckoutDate string `json:"warehousecheckoutdate"`
 	Status  string `json:"status"`
 }
 
@@ -199,7 +203,7 @@ func (s *SmartContract) queryAllProduct(APIstub shim.ChaincodeStubInterface) sc.
 
 func (s *SmartContract) changeProductStatus(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) != 3 {
+	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
 	}
 
@@ -210,10 +214,19 @@ func (s *SmartContract) changeProductStatus(APIstub shim.ChaincodeStubInterface,
 
 	json.Unmarshal(productAsBytes, &product)
 
-	product.ProducerCheckoutDate = dt.String()
-	product.Transporter = args[1]
-	product.Status = "Nakliyede"
-	product.TransporterEntryDate = dt.String()
+	if product.Status == "Uretildi" {
+		product.ProducerCheckoutDate = dt.String()
+		product.Transporter = args[1]
+		product.Status = "Nakliyede"
+		product.TransporterEntryDate = dt.String()
+
+	  } else if product.Status == "Nakliyede" {
+
+		product.Warehouse = args[1]
+		product.WarehouseEntryDate = dt.String()
+		product.Status = "Depoda"
+
+	  }
 
 	productAsBytes, _ = json.Marshal(product)
 	APIstub.PutState(args[0], productAsBytes)
