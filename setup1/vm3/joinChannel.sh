@@ -26,7 +26,7 @@ fetchChannelBlock() {
     setGlobalsForPeer0Org3
 
     # Replace localhost with your orderer's vm IP address
-    peer channel fetch 0 ./channel-artifacts/$CHANNEL_NAME.block -o localhost:7050 \
+    peer channel fetch 0 ./channel-artifacts/$CHANNEL_NAME.block -o 138.68.170.142:7050 \
         --ordererTLSHostnameOverride orderer.example.com \
         -c $CHANNEL_NAME --tls --cafile $ORDERER_CA
 }
@@ -48,7 +48,7 @@ updateAnchorPeers() {
     setGlobalsForPeer0Org3
 
     # Replace localhost with your orderer's vm IP address
-    peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com \
+    peer channel update -o 138.68.170.142:7050 --ordererTLSHostnameOverride orderer.example.com \
         -c $CHANNEL_NAME -f ./../../artifacts/channel/${CORE_PEER_LOCALMSPID}anchors.tx \
         --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
 
@@ -56,6 +56,6 @@ updateAnchorPeers() {
 
 # updateAnchorPeers
 
-fetchChannelBlock
-joinChannel
-updateAnchorPeers
+#fetchChannelBlock
+#joinChannel
+#updateAnchorPeers
